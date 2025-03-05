@@ -8,6 +8,7 @@ from misviajes import MisViajes
 from vuelos import Vuelos
 from compra import Compra, Billete
 from models.cliente import Cliente
+from managerPDF.ManagerPDF import ManagerPDF
 from PyQt6.QtGui import QIcon
 
 # Para la ejecucíon del comando:
@@ -21,6 +22,7 @@ class WindowManager:
         self.destino = None
         self.vuelo = None
         self.viaje = None
+        self.managerPDF = ManagerPDF()
 
         self.ventanas = {  #aqui estara todos las ventanas que necesitaremos
             "menu": Menu(self), 

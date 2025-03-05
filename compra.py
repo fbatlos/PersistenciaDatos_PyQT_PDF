@@ -5,6 +5,7 @@ from PyQt6 import uic  # Librería para trabajar con el archivo de la interfaz
 from PyQt6.QtCore import QDate
 import BD.basedatos as baseLocal
 from PyQt6.QtGui import QIcon
+from managerPDF.ManagerPDF import PDF1
 
 # Clase que muestra la ventana de compra
 class Compra(QMainWindow):
@@ -114,6 +115,7 @@ class Billete(QMainWindow):
         self.cliente = self.manager.usuario
         self.cargar_datos()
         self.bt_aceptar.clicked.connect(self.aceptar)
+        self.bt_descargar.clicked.connect(self.crea_informe1)
         self.setWindowIcon(QIcon("recursos/iconos/icon.ico"))
 
     # Método que carga los datos del cliente y del viaje
@@ -131,6 +133,17 @@ class Billete(QMainWindow):
             destino = baseLocal.obtener_destinos_y_aviones(self.viaje[2])
             if destino is not None:
                 self.te_destino.setText(destino[0][0])
+        
+        def crea_informe1(self):
+            pdf = PDF1()
+            pdf.add_page()
+            pdf.set_font('Arial', 'B', 16)
+            pdf.cell(40, 10, 'Hola Mundo!')
+            try:
+                pdf.output('informe1.pdf', 'F')
+                QMessageBox.information(self,'Información', '¡Informe 1 creado con éxito!') 
+            except:
+                QMessageBox.critical(self,'Error', '¡Error al crear el informe 1!') 
 
     # Método que lleva a la ventana de vuelos
     def aceptar(self):
