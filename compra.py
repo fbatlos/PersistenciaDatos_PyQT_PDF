@@ -139,11 +139,12 @@ class Billete(QMainWindow):
         pdf.add_page()
         pdf.set_font('Arial', 'B', 16)
         pdf.cell(40, 10, 'Hola Mundo!')
-        #try:
-        pdf.output('PDFs/informe1.pdf', 'F')
-        QMessageBox.information(self,'Información', '¡Informe 1 creado con éxito!') 
-        #except:
-        #    QMessageBox.critical(self,'Error', '¡Error al crear el informe 1!') 
+        fecha = self.manager.managerPDF.generar_fecha_actual()
+        try:
+            pdf.output('PDFs/informe' + fecha + '.pdf', 'F')
+            QMessageBox.information(self,'Información', '¡Informe 1 creado con éxito!') 
+        except:
+            QMessageBox.critical(self,'Error', '¡Error al crear el informe 1!') 
 
     # Método que lleva a la ventana de vuelos
     def aceptar(self):

@@ -18,6 +18,10 @@ class ManagerPDF:
         except:
             pass
 
+    def generar_fecha_actual(self):
+        from datetime import datetime
+        now = datetime.now()
+        return now.strftime("%d-%m-%Y-%H:%M:%S")
 
 class PDF1(FPDF):
     def header(self):
