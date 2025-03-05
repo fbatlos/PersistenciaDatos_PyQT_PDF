@@ -135,16 +135,20 @@ class Billete(QMainWindow):
                 self.te_destino.setText(destino[0][0])
         
     def crea_informe1(self):
-        pdf = PDF1()
+        self.grab().save('recursos/informe1.png')
+        pdf = PDF1('L')
         pdf.add_page()
         pdf.set_font('Arial', 'B', 16)
         pdf.cell(40, 10, 'Hola Mundo!')
+        pdf.image('recursos/informe1.png', x= 10, y=20)
         fecha = self.manager.managerPDF.generar_fecha_actual()
-        try:
-            pdf.output('PDFs/informe' + fecha + '.pdf', 'F')
-            QMessageBox.information(self,'Información', '¡Informe 1 creado con éxito!') 
-        except:
-            QMessageBox.critical(self,'Error', '¡Error al crear el informe 1!') 
+        #try:
+        ruta_pdf = 'PDFs/informe' + fecha + '.pdf'
+        print(ruta_pdf)
+        pdf.output(ruta_pdf, 'F')
+        QMessageBox.information(self,'Información', '¡Informe 1 creado con éxito!') 
+        #except:
+        #    QMessageBox.critical(self,'Error', '¡Error al crear el informe 1!') 
 
     # Método que lleva a la ventana de vuelos
     def aceptar(self):
