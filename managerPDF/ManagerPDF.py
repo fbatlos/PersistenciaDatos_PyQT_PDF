@@ -2,7 +2,7 @@ from fpdf import FPDF
 import os
 
 path = os.path.dirname(__file__)
-path_pdfs = "/PDFs/"
+path_pdfs = "PDFs/"
 
 class ManagerPDF:
     def __init__(self):
@@ -23,8 +23,8 @@ class PDF1(FPDF):
     def header(self):
         
         # Logo
-        logo = "../recursos/iconos/logo.png"
-        path_logo = os.path.join(os.path.dirname(__file__), logo)
+        logo = "\logo.png"
+        path_logo = path + logo
         print(path_logo)
         self.image(path_logo, 10, 8, 33)
         # Arial bold 15
@@ -38,7 +38,7 @@ class PDF1(FPDF):
 
     # Page footer
     def footer(self):
-        logo_alber = "../recursos/iconos/logo_alberti.png"
+        logo_alber = "\logo_alberti.png"
         path_logo_alber = path + logo_alber
         
         # Position at 1.5 cm from bottom
@@ -55,7 +55,7 @@ class PDF1(FPDF):
 class PDF2(FPDF):
     def header(self):
         # Logo
-        logo = "logo.png"
+        logo = "/logo.png"
         path_logo = path + logo
         self.image(path_logo, 10, 8, 33)
         # Arial bold 15
