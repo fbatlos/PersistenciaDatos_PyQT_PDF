@@ -8,6 +8,7 @@ import BD.basedatos as baseLocal
 from datetime import datetime
 from PyQt6.QtGui import QIcon
 import glob
+import markdown2
 
 #Clase de La ventana
 class MisViajes(QtWidgets.QMainWindow):
@@ -117,15 +118,13 @@ class MisViajes(QtWidgets.QMainWindow):
     
 
     def pdfMisViajes(self):
-        pdf = PDF2()
-        pdf.add_page()
-        pdf.set_font('Arial', 'B', 16)
+    
 
         fecha = self.manager.managerPDF.generar_fecha_actual()
         ruta_pdf = 'PDFs/informeMisViajes' + fecha + '.pdf'
 
         try:
-            resultados = glob.glob("**/MisviajesInfo.txt", recursive=True)
+            resultados = glob.glob("**/MisviajesInfo.md", recursive=True)
 
             if resultados:
                 ruta_txt = resultados[0]  # Tomamos la primera coincidencia
@@ -135,11 +134,65 @@ class MisViajes(QtWidgets.QMainWindow):
                 return
 
             with open(ruta_txt, "r", encoding="utf-8") as file:
-                for linea in file:
-                    pdf.multi_cell(0, 10, linea.strip())
-            print(ruta_pdf)
+                contenido_md = file.read()
+
+            contenido_html = markdown2.markdown(contenido_md)
+
+            pdf = PDF2()
+            pdf.set_auto_page_break(auto=True, margin=15)
+            pdf.add_page()
+            pdf.set_font("Arial", "", 12)
+
+            for linea in contenido_html.split("\n"):
+                if "<h1>" in linea:
+                    pdf.set_font("Arial", "B", 16)
+                    pdf.multi_cell(0, 10, linea.replace("<h1>", "").replace("</h1>", ""))
+                elif "<h2>" in linea:
+                    pdf.set_font("Arial", "B", 14)
+                    pdf.multi_cell(0, 10, linea.replace("<h2>", "").replace("</h2>", ""))
+                    if "<em>" in linea:
+                        pdf.set_font("Arial", "", 12)
+                        pdf.multi_cell(0, 10, linea.replace("<em>", "_").replace("</em>", "_"))
+                elif "<h3>" in linea:
+                    pdf.set_font("Arial", "B", 12)
+                    pdf.multi_cell(0, 10, linea.replace("<h3>", "").replace("</h3>", ""))
+                elif "<ul>" in linea or "<ol>" in linea:
+                    # Aquí solo marcamos que estamos en una lista, pero no agregamos nada aún
+                    lista_nueva = True
+                elif "<li>" in linea:
+                    if lista_nueva:
+                        pdf.set_font("Arial", "", 12)
+                        lista_nueva = False
+                    pdf.multi_cell(0, 8, "* " + linea.replace("<li>", "").replace("</li>", ""))
+
+                    if "<em>" in linea:
+                        pdf.set_font("Arial", "", 12)
+                        pdf.multi_cell(0, 10, linea.replace("<em>", "_").replace("</em>", "_"))
+
+                elif "</ul>" in linea or "</ol>" in linea:
+                    lista_nueva = False  # Fin de la lista
+                elif "<p>" in linea:
+                    pdf.set_font("Arial", "", 12)
+                    pdf.multi_cell(0, 10, linea.replace("<p>", "").replace("</p>", ""))
+                elif "<strong>" in linea:
+                    pdf.set_font("Arial", "B", 12)
+                    pdf.multi_cell(0, 10, linea.replace("<strong>", "").replace("</strong>", ""))
+                elif "<code>" in linea:
+                    pdf.set_font("Courier", "", 10)  # Usamos una fuente monoespaciada para el código
+                    pdf.multi_cell(0, 10, linea.replace("<code>", "").replace("</code>", ""))
+                elif "<hr />" in linea:
+                    pdf.ln(5)  # Añadimos un espacio después de la línea <hr>
+                    pdf.set_font("Arial", "I", 10)  # Opcional: cambiar fuente a itálica si lo deseas
+                    pdf.multi_cell(0, 2, "------------------------------------------------------------")
+                    pdf.ln(5)  # Añadimos un espacio después de la línea de separación
+                else:
+                    pdf.set_font("Arial", "", 12)
+                    pdf.multi_cell(0, 6, linea.strip())
+                
+
+            
             pdf.output(ruta_pdf, 'F')
-            QMessageBox.information(self,'Información', '¡Informe 1 creado con éxito!')
+            QMessageBox.information(self,'Información', '¡Informe 1 creado con éxito!') 
 
         except FileNotFoundError:
             QMessageBox.warning(self, 'Error', '¡No se encontró MisViajesInfo.txt!')
