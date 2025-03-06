@@ -17,6 +17,20 @@ Se ejecuta la consulta con el email como parámetro.
 Se obtiene el resultado con fetchall().
 Se cierra la conexión y se devuelve la lista de viajes.
 
+
+Resultado de la consulta : 
+
+Viajes encontrados: 
+                    [(1, 'prueba1', 'Francia', '2025-02-28', '2025-02-28', 198.0), 
+                    (2, 'prueba1', 'Italia', '2025-03-03', '2025-03-05', 275.0), 
+                    (3, 'prueba1', 'Italia', '2025-03-03', '2025-03-03', 275.0), 
+                    (4, 'prueba1', 'Italia', '2025-02-27', '2025-03-03', 275.0), 
+                    (5, 'prueba1', 'Italia', '2025-03-03', '2025-03-03', 275.0), 
+                    (6, 'prueba1', 'Italia', '2025-03-03', '2025-03-03', 275.0), 
+                    (7, 'prueba1', 'Francia', '2025-03-03', '2025-03-03', 270.0), 
+                    (8, 'prueba1', 'Italia', '2025-03-03', '2025-03-03', 375.0), 
+                    (9, 'prueba1', 'Italia', '2025-03-03', '2025-03-03', 300.0)]
+
 2. putMisViajes(nueva_fecha_salida, nueva_fecha_regreso, viaje_id)
 ¿Para qué sirve?
 Actualiza las fechas de salida y regreso de un viaje existente.
