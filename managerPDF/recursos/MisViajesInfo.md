@@ -73,6 +73,6 @@ Inserta un nuevo viaje en la base de datos.
 ---
 ## Tecnologías utilizadas
 
-- **Python**: Lenguaje de programación utilizado para manejar la lógica del sistema.
+- Python: Lenguaje de programación utilizado para manejar la lógica del sistema.
 - SQLite (sqlite3): Base de datos ligera y embebida en el proyecto.
 - SQL: Lenguaje de consulta para manejar la base de datos.

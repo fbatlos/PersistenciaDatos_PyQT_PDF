@@ -148,11 +148,12 @@ class MisViajes(QtWidgets.QMainWindow):
                     pdf.set_font("Arial", "B", 16)
                     pdf.multi_cell(0, 10, linea.replace("<h1>", "").replace("</h1>", ""))
                 elif "<h2>" in linea:
-                    pdf.set_font("Arial", "B", 14)
-                    pdf.multi_cell(0, 10, linea.replace("<h2>", "").replace("</h2>", ""))
                     if "<em>" in linea:
                         pdf.set_font("Arial", "", 12)
-                        pdf.multi_cell(0, 10, linea.replace("<em>", "_").replace("</em>", "_"))
+                        pdf.multi_cell(0, 10, linea.replace("<em>", "_").replace("</em>", "_").replace("<h2>", "").replace("</h2>", ""))
+                    else:
+                        pdf.set_font("Arial", "B", 14)
+                        pdf.multi_cell(0, 10, linea.replace("<h2>", "").replace("</h2>", ""))   
                 elif "<h3>" in linea:
                     pdf.set_font("Arial", "B", 12)
                     pdf.multi_cell(0, 10, linea.replace("<h3>", "").replace("</h3>", ""))
@@ -163,27 +164,20 @@ class MisViajes(QtWidgets.QMainWindow):
                     if lista_nueva:
                         pdf.set_font("Arial", "", 12)
                         lista_nueva = False
-                    pdf.multi_cell(0, 8, "* " + linea.replace("<li>", "").replace("</li>", ""))
-
                     if "<em>" in linea:
                         pdf.set_font("Arial", "", 12)
-                        pdf.multi_cell(0, 10, linea.replace("<em>", "_").replace("</em>", "_"))
-
+                        pdf.multi_cell(0, 10, linea.replace("<em>", "_").replace("</em>", "_").replace("<li>", "").replace("</li>", ""))
+                    else:
+                        pdf.multi_cell(0, 8, "* " + linea.replace("<li>", "").replace("</li>", ""))
                 elif "</ul>" in linea or "</ol>" in linea:
                     lista_nueva = False  # Fin de la lista
                 elif "<p>" in linea:
                     pdf.set_font("Arial", "", 12)
                     pdf.multi_cell(0, 10, linea.replace("<p>", "").replace("</p>", ""))
-                elif "<strong>" in linea:
-                    pdf.set_font("Arial", "B", 12)
-                    pdf.multi_cell(0, 10, linea.replace("<strong>", "").replace("</strong>", ""))
-                elif "<code>" in linea:
-                    pdf.set_font("Courier", "", 10)  # Usamos una fuente monoespaciada para el código
-                    pdf.multi_cell(0, 10, linea.replace("<code>", "").replace("</code>", ""))
                 elif "<hr />" in linea:
                     pdf.ln(5)  # Añadimos un espacio después de la línea <hr>
-                    pdf.set_font("Arial", "I", 10)  # Opcional: cambiar fuente a itálica si lo deseas
-                    pdf.multi_cell(0, 2, "------------------------------------------------------------")
+                    pdf.set_font("Arial", "", 10) 
+                    pdf.multi_cell(0, 2, "------------------------------------------------------------------------------------------------------------------------")
                     pdf.ln(5)  # Añadimos un espacio después de la línea de separación
                 else:
                     pdf.set_font("Arial", "", 12)
