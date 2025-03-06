@@ -149,7 +149,7 @@ class MisViajes(QtWidgets.QMainWindow):
                     pdf.multi_cell(0, 10, linea.replace("<h1>", "").replace("</h1>", ""))
                 elif "<h2>" in linea:
                     if "<em>" in linea:
-                        pdf.set_font("Arial", "", 12)
+                        pdf.set_font("Arial", "B", 12)
                         pdf.multi_cell(0, 10, linea.replace("<em>", "_").replace("</em>", "_").replace("<h2>", "").replace("</h2>", ""))
                     else:
                         pdf.set_font("Arial", "B", 14)
@@ -171,7 +171,7 @@ class MisViajes(QtWidgets.QMainWindow):
                         pdf.multi_cell(0, 8, "* " + linea.replace("<li>", "").replace("</li>", ""))
                 elif "</ul>" in linea or "</ol>" in linea:
                     lista_nueva = False  # Fin de la lista
-                elif "<p>" in linea:
+                elif "<p>" in linea or "</p>" in linea:
                     pdf.set_font("Arial", "", 12)
                     pdf.multi_cell(0, 10, linea.replace("<p>", "").replace("</p>", ""))
                 elif "<hr />" in linea:
