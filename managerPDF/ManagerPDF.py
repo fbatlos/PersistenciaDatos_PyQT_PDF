@@ -116,7 +116,7 @@ class PDF3(FPDF):
 
         # Page number
         self.cell(0, 10, 'Página ' + str(self.page_no()), 0, 0, 'R')
-
+#nico
 class PDF4(FPDF):
     def header(self):
         # Logo
@@ -142,7 +142,7 @@ class PDF4(FPDF):
         self.set_font('Arial', 'I', 10)
         self.set_y(-25)
 
-
+#nico
 class PDF5(FPDF):
     def header(self):
         # Logo
