@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'misviajes.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.1
+## Created by: Qt User Interface Compiler version 6.8.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -88,6 +88,11 @@ class Ui_GestionViajes(object):
 
         self.horizontalLayout.addWidget(self.boton_volver_menu)
 
+        self.boton_pdf = QPushButton(self.widget1)
+        self.boton_pdf.setObjectName(u"boton_pdf")
+
+        self.horizontalLayout.addWidget(self.boton_pdf)
+
 
         self.verticalLayout.addWidget(self.widget1)
 
@@ -170,6 +175,7 @@ class Ui_GestionViajes(object):
     def retranslateUi(self, GestionViajes):
         GestionViajes.setWindowTitle(QCoreApplication.translate("GestionViajes", u"Gesti\u00f3n de Viajes", None))
         self.boton_volver_menu.setText(QCoreApplication.translate("GestionViajes", u"< Volver al menu", None))
+        self.boton_pdf.setText(QCoreApplication.translate("GestionViajes", u"Descargar PDF de los viajes", None))
         self.boton_actualizar.setText(QCoreApplication.translate("GestionViajes", u"Actualizar Viaje", None))
         self.boton_eliminar.setText(QCoreApplication.translate("GestionViajes", u"Eliminar Viaje", None))
     # retranslateUi

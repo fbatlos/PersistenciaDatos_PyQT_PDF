@@ -3,10 +3,11 @@ from PyQt6 import QtWidgets, uic
 import os
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import * 
-import sqlite3
+from managerPDF.ManagerPDF import PDF2
 import BD.basedatos as baseLocal
 from datetime import datetime
 from PyQt6.QtGui import QIcon
+import glob
 
 #Clase de La ventana
 class MisViajes(QtWidgets.QMainWindow):
@@ -24,6 +25,7 @@ class MisViajes(QtWidgets.QMainWindow):
             self.boton_actualizar.clicked.connect(self.actualizar_viaje)
             self.boton_eliminar.clicked.connect(self.eliminar_viaje)
             self.boton_volver_menu.clicked.connect(self.volverMenu)
+            self.boton_pdf.clicked.connect(self.pdfMisViajes)
             self.cargar_viajes()
     #Clase usada para cargar todos los viajes
     def cargar_viajes(self):
@@ -113,6 +115,37 @@ class MisViajes(QtWidgets.QMainWindow):
             baseLocal.delMisViajes(viaje_id)
             self.cargar_viajes()
     
+
+    def pdfMisViajes(self):
+        pdf = PDF2()
+        pdf.add_page()
+        pdf.set_font('Arial', 'B', 16)
+
+        fecha = self.manager.managerPDF.generar_fecha_actual()
+        ruta_pdf = 'PDFs/informeMisViajes' + fecha + '.pdf'
+
+        try:
+            resultados = glob.glob("**/MisviajesInfo.txt", recursive=True)
+
+            if resultados:
+                ruta_txt = resultados[0]  # Tomamos la primera coincidencia
+            else:
+               # No encontrado
+                QMessageBox.warning(self, 'Error', '¡No se encontró MisViajesInfo.txt!')
+                return
+
+            with open(ruta_txt, "r", encoding="utf-8") as file:
+                for linea in file:
+                    pdf.multi_cell(0, 10, linea.strip())
+            print(ruta_pdf)
+            pdf.output(ruta_pdf, 'F')
+            QMessageBox.information(self,'Información', '¡Informe 1 creado con éxito!')
+
+        except FileNotFoundError:
+            QMessageBox.warning(self, 'Error', '¡No se encontró MisViajesInfo.txt!')
+
+        
+
     #Volvemos al menu.
     def volverMenu(self):
         self.manager.mostrarVentana("menu")

@@ -59,26 +59,33 @@ class PDF1(FPDF):
 class PDF2(FPDF):
     def header(self):
         # Logo
-        logo = "/logo.png"
+        logo = "\logo.png"
         path_logo = path + logo
+        print(path_logo)
         self.image(path_logo, 10, 8, 33)
         # Arial bold 15
         self.set_font('Arial', 'B', 15)
         # Move to the right
         self.cell(80)
         # Title
-        self.cell(30, 10, 'Title', 1, 0, 'C')
+        self.cell(30, 10, 'Ejemplo de Informe', 'C')
         # Line break
         self.ln(20)
 
     # Page footer
     def footer(self):
+        logo_alber = "\logo_alberti.png"
+        path_logo_alber = path + logo_alber
+        
         # Position at 1.5 cm from bottom
         self.set_y(-15)
+        self.image(path_logo_alber, None, None, 30, 15)
         # Arial italic 8
-        self.set_font('Arial', 'I', 8)
+        self.set_font('Arial', 'I', 10)
+        self.set_y(-25)
+
         # Page number
-        self.cell(0, 10, 'Page ' + str(self.page_no()) + '/{nb}', 0, 0, 'C')
+        self.cell(0, 10, 'Página ' + str(self.page_no()), 0, 0, 'R')
         
 
 class PDF3(FPDF):

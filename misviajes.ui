@@ -80,6 +80,13 @@ background-color: rgba(150, 150, 150, 200); /* Fondo aún más oscuro al presion
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="boton_pdf">
+            <property name="text">
+             <string>Descargar PDF de los viajes</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
