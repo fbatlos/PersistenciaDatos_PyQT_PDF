@@ -38,7 +38,7 @@ class Menu(QtWidgets.QMainWindow):
         self.BMisViajes.clicked.connect(self.irAMisViajes)
         self.QTTredingsTopicsTabla.cellClicked.connect(self.irACompras)
         self.QLabelConfiguracion.mousePressEvent= self.mousePressEventLabel
-        self.PBTodosViajes.clicked.connect(self.pdf1)
+        self.PBTodosViajes.clicked.connect(self.pdf)
 
     #cargamos los datos al a tabla del desinger 
     def cargarDatos(self):
@@ -94,7 +94,7 @@ class Menu(QtWidgets.QMainWindow):
 
 
 
-    def pdf1(self):
+    def pdf(self):
         fecha = self.manager.managerPDF.generar_fecha_actual()
         ruta_pdf = 'PDFs/destinos' + fecha + '.pdf'
 
