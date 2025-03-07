@@ -37,7 +37,21 @@ class Ui_MainWindow(object):
 "background-repeat: no-repeat;\n"
 "background-position: center;\n"
 "background-attachment: fixed;\n"
-"}")
+"}\n"
+"QPushButton {\n"
+"background-color: rgba(255, 255, 255, 150); /* Fondo semitransparente para los botones */\n"
+"color: black; /* Color del texto en los botones */\n"
+"border: 1px solid black; /* Borde negro */\n"
+"padding: 5px; /* Espaciado interno */\n"
+"border-radius: 5px; /* Bordes redondeados */\n"
+"}\n"
+"QPushButton:hover {\n"
+"background-color: rgba(200, 200, 200, 200); /* Fondo m\u00e1s oscuro al pasar el rat\u00f3n */\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color: rgba(150, 150, 150, 200); /* Fondo a\u00fan m\u00e1s oscuro al presionar */\n"
+"}\n"
+"")
         self.verticalLayout = QVBoxLayout(self.principal)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.widget = QWidget(self.principal)
@@ -237,6 +251,11 @@ class Ui_MainWindow(object):
 
 
         self.verticalLayout_3.addWidget(self.widget1)
+
+        self.PBDescargar = QPushButton(self.frame_8)
+        self.PBDescargar.setObjectName(u"PBDescargar")
+
+        self.verticalLayout_3.addWidget(self.PBDescargar)
 
 
         self.gridLayout.addWidget(self.frame_8, 0, 1, 1, 1)
@@ -461,6 +480,7 @@ class Ui_MainWindow(object):
         self.label_3.setText(QCoreApplication.translate("MainWindow", u" Nombre", None))
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"Apellido", None))
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"    DNI    ", None))
+        self.PBDescargar.setText(QCoreApplication.translate("MainWindow", u"Descargar mis datos", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Borrar tu cuenta", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"\u00bfEstas seguro de \n"
 "borrar tu cuenta?", None))
