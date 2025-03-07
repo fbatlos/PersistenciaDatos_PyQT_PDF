@@ -32,7 +32,7 @@ class Configuracion(QtWidgets.QMainWindow):
             self.QTEApellido.setPlainText(self.manager.usuario.apellido)
             self.QTEDni.setPlainText(self.manager.usuario.dni)
         self.BcerrarSesion.clicked.connect(self.cerrarSesion)
-        self.PBDescargar.clicked.connect(self.pdf1)
+        self.PBDescargar.clicked.connect(self.pdf)
 
     #navega hasta la ventana menu
     def irAMenu(self):
@@ -130,7 +130,7 @@ class Configuracion(QtWidgets.QMainWindow):
             #le informamos al usuario que el mismo esta cancelando esa accion
             QMessageBox.information(self, "Acción cancelada por el usuario", "No se ha eliminado la cuenta.")
 
-    def pdf1(self):
+    def pdf(self):
         fecha = self.manager.managerPDF.generar_fecha_actual()
         ruta_pdf = 'PDFs/usuario' + fecha + '.pdf'
 
