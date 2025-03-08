@@ -31,14 +31,14 @@ class Menu(QtWidgets.QMainWindow):
             self.QLNombre.setText(self.manager.usuario.nombre)
             self.QLCorreo.setText(self.manager.usuario.email)
         
-        #conectamos los diferentes elementos
+        #conectamos los diferentes  elementos
         self.QLabelUsuario.setPixmap(QtGui.QPixmap(":/icons/recursos/iconos/usuario.png"))
         self.QLabelConfiguracion.setPixmap(QtGui.QPixmap(":/icons/recursos/iconos/engranaje.png"))
         self.QTMisViajes.itemClicked.connect(self.irAMisViajes)
         self.BMisViajes.clicked.connect(self.irAMisViajes)
         self.QTTredingsTopicsTabla.cellClicked.connect(self.irACompras)
         self.QLabelConfiguracion.mousePressEvent= self.mousePressEventLabel
-        self.PBTodosViajes.clicked.connect(self.pdf)
+        self.BtodoViajes.clicked.connect(self.pdf)
 
     #cargamos los datos al a tabla del desinger 
     def cargarDatos(self):
@@ -104,7 +104,7 @@ class Menu(QtWidgets.QMainWindow):
             if resultados:
                 ruta_txt = resultados[0]  # Tomamos la primera coincidencia
             else:
-                # No encontrado
+               # No encontrado
                 QMessageBox.warning(self, 'Error', '¡No se encontró destinosVigentes.md!')
                 return 
 

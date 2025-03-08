@@ -16,11 +16,11 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QApplication, QCheckBox,
-    QFrame, QHBoxLayout, QHeaderView, QLabel,
-    QListWidget, QListWidgetItem, QMainWindow, QPushButton,
-    QSizePolicy, QTabWidget, QTableWidget, QTableWidgetItem,
-    QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QApplication, QFrame,
+    QHBoxLayout, QHeaderView, QLabel, QListWidget,
+    QListWidgetItem, QMainWindow, QPushButton, QSizePolicy,
+    QTabWidget, QTableWidget, QTableWidgetItem, QVBoxLayout,
+    QWidget)
 import recursos_rc
 
 class Ui_MainWindow(object):
@@ -268,11 +268,6 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_4.addWidget(self.QLMisViajes)
 
-        self.checkBox = QCheckBox(self.QFMisViajes)
-        self.checkBox.setObjectName(u"checkBox")
-
-        self.verticalLayout_4.addWidget(self.checkBox)
-
         self.widget_2 = QWidget(self.QFMisViajes)
         self.widget_2.setObjectName(u"widget_2")
         self.horizontalLayout_4 = QHBoxLayout(self.widget_2)
@@ -389,7 +384,7 @@ class Ui_MainWindow(object):
 
         self.BtodoViajes = QPushButton(self.widget)
         self.BtodoViajes.setObjectName(u"BtodoViajes")
-        self.BtodoViajes.setEnabled(False)
+        self.BtodoViajes.setEnabled(True)
 
         self.verticalLayout_6.addWidget(self.BtodoViajes)
 
@@ -432,7 +427,6 @@ class Ui_MainWindow(object):
         self.QLNombreApp.setText(QCoreApplication.translate("MainWindow", u"Skyberia", None))
         self.QLabelConfiguracion.setText("")
         self.QLMisViajes.setText(QCoreApplication.translate("MainWindow", u"Mis viajes", None))
-        self.checkBox.setText(QCoreApplication.translate("MainWindow", u"CheckBox", None))
         self.BMisViajes.setText(QCoreApplication.translate("MainWindow", u"Mis Viajes", None))
         self.QLTredingTopics.setText(QCoreApplication.translate("MainWindow", u"Destinos vigentes", None))
         ___qtablewidgetitem = self.QTTredingsTopicsTabla.horizontalHeaderItem(0)

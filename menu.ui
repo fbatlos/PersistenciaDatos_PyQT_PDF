@@ -608,13 +608,6 @@ background-color: rgba(150, 150, 150, 200); /* Fondo aún más oscuro al presion
               </widget>
              </item>
              <item>
-              <widget class="QCheckBox" name="checkBox">
-               <property name="text">
-                <string>CheckBox</string>
-               </property>
-              </widget>
-             </item>
-             <item>
               <widget class="QWidget" name="widget_2" native="true">
                <layout class="QHBoxLayout" name="horizontalLayout_4">
                 <item>
@@ -839,7 +832,7 @@ background-color: rgba(150, 150, 150, 200); /* Fondo aún más oscuro al presion
                 <item>
                  <widget class="QPushButton" name="BtodoViajes">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="text">
                    <string>Descargar todos los viajes</string>
