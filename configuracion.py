@@ -132,8 +132,10 @@ class Configuracion(QtWidgets.QMainWindow):
             QMessageBox.information(self, "Acción cancelada por el usuario", "No se ha eliminado la cuenta.")
 
     def pdf(self):
+        from models.cliente import Cliente
+        usuario:Cliente = self.manager.usuario
         fecha = self.manager.managerPDF.generar_fecha_actual()
-        ruta_pdf = 'PDFs/usuario' + fecha + '.pdf'
+        ruta_pdf = 'PDFs/informacionUsuario' + fecha + '.pdf'
 
         try:
             resultados = glob.glob("**/informacionUsuario.md", recursive=True)
@@ -152,6 +154,15 @@ class Configuracion(QtWidgets.QMainWindow):
 
             pdf = PDF4()
             pdf.set_auto_page_break(auto=True, margin=15)
+            pdf.add_page()
+            pdf.set_font("Arial", "", 12)
+            pdf.multi_cell(0, 10, f"Informe de información del usuario: {usuario.nombre}")
+            pdf.ln(5)
+            lista = ["nombre","password","email","apellido","dni"]
+            for dato in lista:
+                    pdf.set_font("Arial", "B", 12)
+                    pdf.multi_cell(0, 10, f"{dato.capitalize()}: {getattr(usuario, dato)}")
+                    pdf.ln(5)
             pdf.add_page()
             pdf.set_font("Arial", "", 12)
 

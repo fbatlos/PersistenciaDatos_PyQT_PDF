@@ -95,8 +95,10 @@ class Menu(QtWidgets.QMainWindow):
 
 
     def pdf(self):
+
         fecha = self.manager.managerPDF.generar_fecha_actual()
-        ruta_pdf = 'PDFs/destinos' + fecha + '.pdf'
+        ruta_pdf = 'PDFs/Destinos' + fecha + '.pdf'
+        viajes = baseLocal.obtenerSoloElNombreDelViajeParaLaPantallaMenu(self.manager.usuario.email)
 
         try:
             resultados = glob.glob("**/destinosVigentes.md", recursive=True)
@@ -112,9 +114,20 @@ class Menu(QtWidgets.QMainWindow):
                 contenido_md = file.read()
 
             contenido_html = markdown2.markdown(contenido_md)
-
             pdf = PDF5()
             pdf.set_auto_page_break(auto=True, margin=15)
+            pdf.add_page()
+            pdf.set_font("Arial", "", 12)
+            pdf.multi_cell(0, 10, f"Informe de destinos vigentes a fecha de hoy:{fecha}")
+            pdf.ln(5)
+            pdf.set_font("Arial", "B", 12)
+            pdf.multi_cell(0, 10, "Viajes vigentes:")
+            for dato in viajes:
+                pdf.set_font("Arial", "", 12)
+                pdf.multi_cell(0, 10, f"    Origen: España")
+                pdf.set_font("Arial", "", 12)
+                pdf.multi_cell(0, 10, f"    Destino: {dato}")
+                pdf.ln(5)
             pdf.add_page()
             pdf.set_font("Arial", "", 12)
 
