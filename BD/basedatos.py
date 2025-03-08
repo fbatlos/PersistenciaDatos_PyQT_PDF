@@ -233,6 +233,20 @@ def obtener_vuelos(destino, orden):
     return aviones
 
 
+def obtener_vuelos_categoria(categoria, destino):
+    conn = sqlite3.connect("viajes.db")
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT v.id , a.modelo, a.categoria, ROUND(v.precio, 2), v.cantidad_asientos
+        FROM avion a
+        JOIN vuelo v ON a.id = v.avion_id
+        JOIN destino d ON v.destino_id = d.id
+        WHERE d.nombre = ? AND a.categoria = ?
+    """, (destino, categoria))
+    aviones = cursor.fetchall()
+    conn.close()
+    return aviones
+
 def restablecer():
     conn = sqlite3.connect("viajes.db")
     cursor = conn.cursor()

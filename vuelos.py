@@ -27,7 +27,7 @@ class Vuelos(QMainWindow):
         self.comboBox.currentIndexChanged.connect(self.update_tabla_vuelos)
         self.tabla_vuelos.cellClicked.connect(self.ir_a_comprar)
         self.bt_volver.clicked.connect(self.volver)
-        self.bt_descargar.clicked.connect(self.pdfVuelos)
+        self.bt_descargar.clicked.connect(self.pedir_categoria)
         self.setWindowIcon(QIcon("recursos/iconos/icon.ico")) # Se le pone el icon a la aplicación
 
     # Método que carga los vuelos disponibles
@@ -81,10 +81,37 @@ class Vuelos(QMainWindow):
     def volver(self):
         self.manager.mostrarVentana("menu")
 
-    def pdfVuelos(self):
+    def pedir_categoria(self):
+        # Creamos un diálogo para seleccionar la categoría
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Selecciona la categoría")
+        dialog.setWindowIcon(QIcon("recursos/iconos/icon.ico"))
+        dialog.setFixedSize(200, 100)
+        layout = QVBoxLayout()
+        dialog.setLayout(layout)
+
+        # Creamos un combo box para seleccionar la categoría
+        combo = QComboBox()
+        combo.addItems(["Económico", "Turista", "Business", "Premium"])
+        layout.addWidget(combo)
+
+        # Creamos un botón para aceptar la selección
+        boton = QPushButton("Aceptar")
+        layout.addWidget(boton)
+
+        def aceptar():
+            self.pdf_vuelos(combo.currentText())  # Llamamos a la función
+            dialog.accept()
+
+        # Conectamos el botón con la acción de descargar el PDF y cerramos el diálogo
+        boton.clicked.connect(aceptar)
+
+        # Mostramos el diálogo
+        dialog.exec()
+
+    def pdf_vuelos(self, categoria):
         fecha = self.manager.managerPDF.generar_fecha_actual()
         ruta_pdf = 'PDFs/informeVuelos' + fecha + '.pdf'
-        self.grab().save('recursos/informe1.png')
 
         try:
             resultados = glob.glob("**/VuelosInfo.md", recursive=True)
@@ -98,10 +125,27 @@ class Vuelos(QMainWindow):
                 contenido_md = file.read()
             
             contenido_html = markdown2.markdown(contenido_md)
-            pdf = PDF3('L')
+            pdf = PDF3()
             pdf.set_auto_page_break(auto=True, margin=15)
             pdf.add_page()
-            pdf.image("recursos/informe1.png", x= 10, y=30, w= 270, h= 155)
+            pdf.set_font("Arial", "", 12)
+
+            pdf.multi_cell(0, 10, f"Informe de vuelos a {self.destino} con categoria: {categoria}")
+            pdf.ln(5)
+
+            vuelos = baseLocal.obtener_vuelos_categoria(categoria, self.destino);
+
+            if(len(vuelos) == 0):
+                pdf.multi_cell(0, 10, "No se encontraron vuelos con esa categoría.")
+            else:
+            # Añadimos los viajes
+                for vuelo in vuelos:
+                    pdf.set_font("Arial", "B", 12)
+                    pdf.multi_cell(0, 10, f"ID: {vuelo[0]}, Avión: {vuelo[1]}")
+                    pdf.set_font("Arial", "", 12)
+                    pdf.multi_cell(0, 8, f"Categoria: {vuelo[2]}, Precio: {vuelo[3]}, Cantidad de asientos: {vuelo[4]}")
+                    pdf.ln(5)
+
             pdf.add_page()
             pdf.set_font("Arial", "", 12)
             
