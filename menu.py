@@ -38,7 +38,7 @@ class Menu(QtWidgets.QMainWindow):
         self.BMisViajes.clicked.connect(self.irAMisViajes)
         self.QTTredingsTopicsTabla.cellClicked.connect(self.irACompras)
         self.QLabelConfiguracion.mousePressEvent= self.mousePressEventLabel
-        #self.PBTodosViajes.clicked.connect(self.pdf)
+        self.PBTodosViajes.clicked.connect(self.pdf)
 
     #cargamos los datos al a tabla del desinger 
     def cargarDatos(self):
