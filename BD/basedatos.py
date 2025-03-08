@@ -100,9 +100,9 @@ def insertar_cliente(cliente):
     cursor = conn.cursor()
 
     cursor.execute("""
-        INSERT INTO cliente (nombre, email, apellido, dni)
+        INSERT INTO cliente (nombre, password, email, apellido, dni)
         VALUES (?, ?, ?, ?)
-    """, (cliente.nombre, cliente.email, cliente.apellido, cliente.dni))
+    """, (cliente.nombre, cliente.password, cliente.email, cliente.apellido, cliente.dni))
     
     conn.commit()
     conn.close()
@@ -263,6 +263,7 @@ def restablecer():
         CREATE TABLE IF NOT EXISTS cliente (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nombre TEXT NOT NULL,
+            password TEXT NOT NULL,
             email TEXT NOT NULL UNIQUE,
             apellido TEXT NOT NULL,
             dni TEXT NOT NULL
