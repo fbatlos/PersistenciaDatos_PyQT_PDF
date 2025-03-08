@@ -120,7 +120,7 @@ class PDF3(FPDF):
 class PDF4(FPDF):
     def header(self):
         # Logo
-        logo = "logo.png"
+        logo = "\logo.png"
         path_logo = path + logo
         self.image(path_logo, 10, 8, 20)
         # Arial bold 15
@@ -146,7 +146,7 @@ class PDF4(FPDF):
 class PDF5(FPDF):
     def header(self):
         # Logo
-        logo = "logo.png"
+        logo = "\logo.png"
         path_logo = path + logo
         self.image(path_logo, 10, 8, 20)
         # Arial bold 15

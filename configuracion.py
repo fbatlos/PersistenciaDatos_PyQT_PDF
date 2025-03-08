@@ -11,6 +11,7 @@ from PyQt6.QtGui import QIcon
 import glob
 import markdown2
 from managerPDF.ManagerPDF import PDF4
+
 #clase que se encarga de actualizar el usuario, eliminar la cuenta del usuario o cerrar la sesion
 class Configuracion(QtWidgets.QMainWindow):
     def __init__(self,manager):
