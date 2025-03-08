@@ -69,8 +69,8 @@ class Configuracion(QtWidgets.QMainWindow):
             if respuesta == QMessageBox.StandardButton.Yes:
                 baseLocal.update_cliente(nuevo_nombre, nuevo_email, dni, correo,)
                 usuario_actualizado = baseLocal.obtenerUsuarioPorCorreo(correo)
-                id, nombre, email, apellido, dni = usuario_actualizado
-                self.manager.usuario = Cliente(id, nombre, email, apellido, dni)
+                id, nombre, password, email, apellido, dni = usuario_actualizado
+                self.manager.usuario = Cliente(id, nombre, password, email, apellido, dni)
                 QMessageBox.information(self, "Actualización", "Datos actualizados con éxito.")
 
             #si no informa que el propio usuario lo ha cancelado
