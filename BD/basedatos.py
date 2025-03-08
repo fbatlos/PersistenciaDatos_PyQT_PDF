@@ -109,6 +109,23 @@ def insertar_cliente(cliente):
     return True
     print("Cliente insertado correctamente.")
 
+def obtener_viajes_por_mes(mes,email):
+    conn = sqlite3.connect("viajes.db")
+    cursor = conn.cursor()
+    cursor.execute("""
+    SELECT viaje.id, cliente.nombre, destino.nombre, viaje.fecha_salida, viaje.fecha_regreso, viaje.precio
+    FROM viaje
+    JOIN cliente ON viaje.cliente_email = cliente.email
+    JOIN vuelo ON viaje.vuelo_id = vuelo.id
+    JOIN destino ON vuelo.destino_id = destino.id
+    WHERE strftime('%m', viaje.fecha_salida) = ?
+    AND cliente.email = ?
+    """, (mes.zfill(2),email))
+
+    viajes = cursor.fetchall()
+    conn.close()
+    return viajes
+
 def getMisViajes(email):
     conn = sqlite3.connect("viajes.db") 
     cursor = conn.cursor()

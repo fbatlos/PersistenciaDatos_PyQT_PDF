@@ -26,7 +26,7 @@ class MisViajes(QtWidgets.QMainWindow):
             self.boton_actualizar.clicked.connect(self.actualizar_viaje)
             self.boton_eliminar.clicked.connect(self.eliminar_viaje)
             self.boton_volver_menu.clicked.connect(self.volverMenu)
-            self.boton_pdf.clicked.connect(self.pdfMisViajes)
+            self.boton_pdf.clicked.connect(self.seleccionar_mes)
             self.cargar_viajes()
     #Clase usada para cargar todos los viajes
     def cargar_viajes(self):
@@ -115,14 +115,29 @@ class MisViajes(QtWidgets.QMainWindow):
         if respuesta == QtWidgets.QMessageBox.StandardButton.Yes:
             baseLocal.delMisViajes(viaje_id)
             self.cargar_viajes()
-    
 
-    def pdfMisViajes(self):
-    
 
+
+    def seleccionar_mes(self):
+        mes, ok = QInputDialog.getText(None, "Seleccionar Mes", "Ingrese el mes (MM):")
+
+        if ok and mes.isdigit() and 1 <= int(mes) <= 12:
+            viajes = baseLocal.obtener_viajes_por_mes(mes,self.email)
+            self.pdfMisViajes(mes, viajes)
+        elif not ok:
+            pass  
+        else:
+            QMessageBox.warning(self, 'Error', '¡Mes inválido!')
+   
+
+
+
+    def pdfMisViajes(self, mes, viajes):
+        print(viajes)
+        #Le damos nombre al archivo y lo guardamos en la carpeta PDFs
         fecha = self.manager.managerPDF.generar_fecha_actual()
         ruta_pdf = 'PDFs/informeMisViajes' + fecha + '.pdf'
-
+        #Buscamos el archivo MisViajesInfo.md en la carpeta del proyecto
         try:
             resultados = glob.glob("**/MisviajesInfo.md", recursive=True)
 
@@ -130,19 +145,41 @@ class MisViajes(QtWidgets.QMainWindow):
                 ruta_txt = resultados[0]  # Tomamos la primera coincidencia
             else:
                # No encontrado
-                QMessageBox.warning(self, 'Error', '¡No se encontró MisViajesInfo.txt!')
+                QMessageBox.warning(self, 'Error', '¡No se encontró MisViajesInfo.md!')
                 return
 
             with open(ruta_txt, "r", encoding="utf-8") as file:
                 contenido_md = file.read()
-
+            
+            # Convertimos el contenido de Markdown a HTML
             contenido_html = markdown2.markdown(contenido_md)
 
+            # Creamos el PDF
             pdf = PDF2()
             pdf.set_auto_page_break(auto=True, margin=15)
+
             pdf.add_page()
             pdf.set_font("Arial", "", 12)
 
+            pdf.multi_cell(0, 10, f"Informe de viajes para el mes: {mes}")
+            pdf.ln(5)
+
+            if(len(viajes) == 0):
+                pdf.multi_cell(0, 10, "No se encontraron viajes para este mes.")
+            else:
+            # Añadimos los viajes
+                for viaje in viajes:
+                    pdf.set_font("Arial", "B", 12)
+                    pdf.multi_cell(0, 10, f"ID: {viaje[0]}, Cliente: {viaje[1]}")
+                    pdf.set_font("Arial", "", 12)
+                    pdf.multi_cell(0, 8, f"Destino: {viaje[2]}, Salida: {viaje[3]}, Regreso: {viaje[4]}, Precio: {viaje[5]}")
+                    pdf.ln(5)
+
+                pdf.add_page()
+                pdf.set_font("Arial", "", 12)
+            
+
+            # Procesamos el contenido HTML
             for linea in contenido_html.split("\n"):
                 if "<h1>" in linea:
                     pdf.set_font("Arial", "B", 16)
@@ -158,7 +195,7 @@ class MisViajes(QtWidgets.QMainWindow):
                     pdf.set_font("Arial", "B", 12)
                     pdf.multi_cell(0, 10, linea.replace("<h3>", "").replace("</h3>", ""))
                 elif "<ul>" in linea or "<ol>" in linea:
-                    # Aquí solo marcamos que estamos en una lista, pero no agregamos nada aún
+                    # Aquí solo marcamos que estamos en una lista
                     lista_nueva = True
                 elif "<li>" in linea:
                     if lista_nueva:
@@ -183,15 +220,12 @@ class MisViajes(QtWidgets.QMainWindow):
                     pdf.set_font("Arial", "", 12)
                     pdf.multi_cell(0, 6, linea.strip())
                 
-
-            
             pdf.output(ruta_pdf, 'F')
             QMessageBox.information(self,'Información', '¡Informe 1 creado con éxito!') 
 
         except FileNotFoundError:
             QMessageBox.warning(self, 'Error', '¡No se encontró MisViajesInfo.txt!')
-
-        
+    
 
     #Volvemos al menu.
     def volverMenu(self):
