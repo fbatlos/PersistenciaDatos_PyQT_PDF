@@ -252,7 +252,7 @@ def restablecer():
     cursor = conn.cursor()
 
     # DROP PARA CREAR LAS TABLAS DE NUEVO
-    #cursor.execute("DROP TABLE IF EXISTS cliente") 
+    cursor.execute("DROP TABLE IF EXISTS cliente") 
     cursor.execute("DROP TABLE IF EXISTS destino") 
     cursor.execute("DROP TABLE IF EXISTS vuelo") 
     cursor.execute("DROP TABLE IF EXISTS avion") 
