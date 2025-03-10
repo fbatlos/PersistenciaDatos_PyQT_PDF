@@ -126,7 +126,7 @@ class Menu(QtWidgets.QMainWindow):
                 pdf.set_font("Arial", "", 12)
                 pdf.multi_cell(0, 10, f"    Origen: España")
                 pdf.set_font("Arial", "", 12)
-                pdf.multi_cell(0, 10, f"    Destino: {dato}")
+                pdf.multi_cell(0, 10, f"    Destino: {dato[0]}")
                 pdf.ln(5)
             pdf.add_page()
             pdf.set_font("Arial", "", 12)
