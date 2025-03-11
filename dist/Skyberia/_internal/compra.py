@@ -5,6 +5,9 @@ from PyQt6 import uic  # Librería para trabajar con el archivo de la interfaz
 from PyQt6.QtCore import QDate
 import BD.basedatos as baseLocal
 from PyQt6.QtGui import QIcon
+import glob
+import markdown2
+from managerPDF.ManagerPDF import PDF1
 
 # Clase que muestra la ventana de compra
 class Compra(QMainWindow):
@@ -114,6 +117,7 @@ class Billete(QMainWindow):
         self.cliente = self.manager.usuario
         self.cargar_datos()
         self.bt_aceptar.clicked.connect(self.aceptar)
+        self.bt_descargar.clicked.connect(self.crea_informe1)
         self.setWindowIcon(QIcon("recursos/iconos/icon.ico"))
 
     # Método que carga los datos del cliente y del viaje
@@ -131,7 +135,78 @@ class Billete(QMainWindow):
             destino = baseLocal.obtener_destinos_y_aviones(self.viaje[2])
             if destino is not None:
                 self.te_destino.setText(destino[0][0])
+        
+    def crea_informe1(self):
+        fecha = self.manager.managerPDF.generar_fecha_actual()
+        ruta_pdf = 'PDFs/Billete' + fecha + '.pdf'
+        self.grab().save('PDFs/informe1.png')
 
+        try:
+            resultados = glob.glob("**/BilleteInfo.md", recursive=True)
+            if resultados:
+                ruta_txt = resultados[0]  # Tomamos la primera coincidencia
+            else:
+                QMessageBox.warning(self, 'Error', '¡No se encontró BilleteInfo.md!')
+                return
+            
+            with open(ruta_txt, "r", encoding="utf-8") as file:
+                contenido_md = file.read()
+            
+            contenido_html = markdown2.markdown(contenido_md)
+            pdf = PDF1('L')
+            pdf.set_auto_page_break(auto=True, margin=15)
+            pdf.add_page()
+            pdf.image("PDFs/informe1.png", x= 10, y=30, w= 270, h= 155)
+            pdf.add_page()
+            pdf.set_font("Arial", "", 12)
+            
+
+            for linea in contenido_html.split("\n"):
+                if "<h1>" in linea:
+                    pdf.set_font("Arial", "B", 16)
+                    pdf.multi_cell(0, 10, linea.replace("<h1>", "").replace("</h1>", ""))
+                elif "<h2>" in linea:
+                    if "<em>" in linea:
+                        pdf.set_font("Arial", "B", 12)
+                        pdf.multi_cell(0, 10, linea.replace("<em>", "_").replace("</em>", "_").replace("<h2>", "").replace("</h2>", ""))
+                    else:
+                        pdf.set_font("Arial", "B", 14)
+                        pdf.multi_cell(0, 10, linea.replace("<h2>", "").replace("</h2>", ""))   
+                elif "<h3>" in linea:
+                    pdf.set_font("Arial", "B", 12)
+                    pdf.multi_cell(0, 10, linea.replace("<h3>", "").replace("</h3>", ""))
+                elif "<ul>" in linea or "<ol>" in linea:
+                    # Aquí solo marcamos que estamos en una lista, pero no agregamos nada aún
+                    lista_nueva = True
+                elif "<li>" in linea:
+                    if lista_nueva:
+                        pdf.set_font("Arial", "", 12)
+                        lista_nueva = False
+                    if "<em>" in linea:
+                        pdf.set_font("Arial", "", 12)
+                        pdf.multi_cell(0, 10, linea.replace("<em>", "_").replace("</em>", "_").replace("<li>", "").replace("</li>", ""))
+                    else:
+                        pdf.multi_cell(0, 8, "* " + linea.replace("<li>", "").replace("</li>", ""))
+                elif "</ul>" in linea or "</ol>" in linea:
+                    lista_nueva = False  # Fin de la lista
+                elif "<p>" in linea or "</p>" in linea:
+                    pdf.set_font("Arial", "", 12)
+                    pdf.multi_cell(0, 10, linea.replace("<p>", "").replace("</p>", ""))
+                elif "<hr />" in linea:
+                    pdf.ln(5)  # Añadimos un espacio después de la línea <hr>
+                    pdf.set_font("Arial", "", 10) 
+                    pdf.multi_cell(0, 2, "------------------------------------------------------------------------------------------------------------------------")
+                    pdf.ln(5)  # Añadimos un espacio después de la línea de separación
+                else:
+                    pdf.set_font("Arial", "", 12)
+                    pdf.multi_cell(0, 6, linea.strip())
+                
+
+            pdf.output(ruta_pdf, 'F')
+            QMessageBox.information(self,'Información', '¡Informe creado con éxito!') 
+            os.remove("PDFs/informe1.png")
+        except FileNotFoundError:
+            QMessageBox.warning(self, 'Error', '¡No se encontró BilleteInfo.md!')
     # Método que lleva a la ventana de vuelos
     def aceptar(self):
         self.manager.mostrarVentana("menu")

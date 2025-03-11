@@ -328,8 +328,8 @@ class Ui_MainWindow(object):
         sizePolicy5.setHeightForWidth(self.widget.sizePolicy().hasHeightForWidth())
         self.widget.setSizePolicy(sizePolicy5)
         self.widget.setMaximumSize(QSize(16777215, 16777215))
-        self.horizontalLayout_3 = QHBoxLayout(self.widget)
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.verticalLayout_6 = QVBoxLayout(self.widget)
+        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
         self.QTTredingsTopicsTabla = QTableWidget(self.widget)
         if (self.QTTredingsTopicsTabla.columnCount() < 1):
             self.QTTredingsTopicsTabla.setColumnCount(1)
@@ -371,7 +371,7 @@ class Ui_MainWindow(object):
         self.QTTredingsTopicsTabla.setSortingEnabled(False)
         self.QTTredingsTopicsTabla.setWordWrap(True)
         self.QTTredingsTopicsTabla.setCornerButtonEnabled(True)
-        self.QTTredingsTopicsTabla.horizontalHeader().setVisible(True)
+        self.QTTredingsTopicsTabla.horizontalHeader().setVisible(False)
         self.QTTredingsTopicsTabla.horizontalHeader().setMinimumSectionSize(32)
         self.QTTredingsTopicsTabla.horizontalHeader().setHighlightSections(True)
         self.QTTredingsTopicsTabla.horizontalHeader().setStretchLastSection(True)
@@ -380,7 +380,13 @@ class Ui_MainWindow(object):
         self.QTTredingsTopicsTabla.verticalHeader().setDefaultSectionSize(24)
         self.QTTredingsTopicsTabla.verticalHeader().setHighlightSections(True)
 
-        self.horizontalLayout_3.addWidget(self.QTTredingsTopicsTabla)
+        self.verticalLayout_6.addWidget(self.QTTredingsTopicsTabla)
+
+        self.BtodoViajes = QPushButton(self.widget)
+        self.BtodoViajes.setObjectName(u"BtodoViajes")
+        self.BtodoViajes.setEnabled(True)
+
+        self.verticalLayout_6.addWidget(self.BtodoViajes)
 
 
         self.verticalLayout_5.addWidget(self.widget)
@@ -422,7 +428,7 @@ class Ui_MainWindow(object):
         self.QLabelConfiguracion.setText("")
         self.QLMisViajes.setText(QCoreApplication.translate("MainWindow", u"Mis viajes", None))
         self.BMisViajes.setText(QCoreApplication.translate("MainWindow", u"Mis Viajes", None))
-        self.QLTredingTopics.setText(QCoreApplication.translate("MainWindow", u"Treding topics", None))
+        self.QLTredingTopics.setText(QCoreApplication.translate("MainWindow", u"Destinos vigentes", None))
         ___qtablewidgetitem = self.QTTredingsTopicsTabla.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Destino", None));
 
@@ -430,5 +436,6 @@ class Ui_MainWindow(object):
         self.QTTredingsTopicsTabla.setSortingEnabled(False)
         self.QTTredingsTopicsTabla.setSortingEnabled(__sortingEnabled)
 
+        self.BtodoViajes.setText(QCoreApplication.translate("MainWindow", u"Descargar todos los viajes", None))
     # retranslateUi
 

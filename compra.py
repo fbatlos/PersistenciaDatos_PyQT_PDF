@@ -139,7 +139,7 @@ class Billete(QMainWindow):
     def crea_informe1(self):
         fecha = self.manager.managerPDF.generar_fecha_actual()
         ruta_pdf = 'PDFs/Billete' + fecha + '.pdf'
-        self.grab().save('recursos/informe1.png')
+        self.grab().save('PDFs/informe1.png')
 
         try:
             resultados = glob.glob("**/BilleteInfo.md", recursive=True)
@@ -156,7 +156,7 @@ class Billete(QMainWindow):
             pdf = PDF1('L')
             pdf.set_auto_page_break(auto=True, margin=15)
             pdf.add_page()
-            pdf.image("recursos/informe1.png", x= 10, y=30, w= 270, h= 155)
+            pdf.image("PDFs/informe1.png", x= 10, y=30, w= 270, h= 155)
             pdf.add_page()
             pdf.set_font("Arial", "", 12)
             
@@ -204,8 +204,9 @@ class Billete(QMainWindow):
 
             pdf.output(ruta_pdf, 'F')
             QMessageBox.information(self,'Información', '¡Informe creado con éxito!') 
+            os.remove("PDFs/informe1.png")
         except FileNotFoundError:
-            QMessageBox.warning(self, 'Error', '¡No se encontró VuelosInfo.md!')
+            QMessageBox.warning(self, 'Error', '¡No se encontró BilleteInfo.md!')
     # Método que lleva a la ventana de vuelos
     def aceptar(self):
         self.manager.mostrarVentana("menu")

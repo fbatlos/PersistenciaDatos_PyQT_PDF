@@ -62,7 +62,7 @@ def obtener_cliente(email):
     cursor.execute("SELECT * FROM cliente WHERE email = ?", (email,))
     cliente = cursor.fetchone()
     conn.close()
-    return Cliente(0,cliente[1],cliente[2],cliente[3],cliente[4])
+    return Cliente(0,cliente[1],cliente[2],cliente[3],cliente[4],cliente[5])
 
 def eliminarClientePorCorreo(correo):
     conexion = sqlite3.connect("viajes.db")
@@ -100,14 +100,31 @@ def insertar_cliente(cliente):
     cursor = conn.cursor()
 
     cursor.execute("""
-        INSERT INTO cliente (nombre, email, apellido, dni)
-        VALUES (?, ?, ?, ?)
-    """, (cliente.nombre, cliente.email, cliente.apellido, cliente.dni))
+        INSERT INTO cliente (nombre, password, email, apellido, dni)
+        VALUES (?, ?, ?, ?, ?)
+    """, (cliente.nombre, cliente.password, cliente.email, cliente.apellido, cliente.dni))
     
     conn.commit()
     conn.close()
     return True
     print("Cliente insertado correctamente.")
+
+def obtener_viajes_por_mes(mes,email):
+    conn = sqlite3.connect("viajes.db")
+    cursor = conn.cursor()
+    cursor.execute("""
+    SELECT viaje.id, cliente.nombre, destino.nombre, viaje.fecha_salida, viaje.fecha_regreso, viaje.precio
+    FROM viaje
+    JOIN cliente ON viaje.cliente_email = cliente.email
+    JOIN vuelo ON viaje.vuelo_id = vuelo.id
+    JOIN destino ON vuelo.destino_id = destino.id
+    WHERE strftime('%m', viaje.fecha_salida) = ?
+    AND cliente.email = ?
+    """, (mes.zfill(2),email))
+
+    viajes = cursor.fetchall()
+    conn.close()
+    return viajes
 
 def getMisViajes(email):
     conn = sqlite3.connect("viajes.db") 
@@ -216,12 +233,26 @@ def obtener_vuelos(destino, orden):
     return aviones
 
 
+def obtener_vuelos_categoria(categoria, destino):
+    conn = sqlite3.connect("viajes.db")
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT v.id , a.modelo, a.categoria, ROUND(v.precio, 2), v.cantidad_asientos
+        FROM avion a
+        JOIN vuelo v ON a.id = v.avion_id
+        JOIN destino d ON v.destino_id = d.id
+        WHERE d.nombre = ? AND a.categoria = ?
+    """, (destino, categoria))
+    aviones = cursor.fetchall()
+    conn.close()
+    return aviones
+
 def restablecer():
     conn = sqlite3.connect("viajes.db")
     cursor = conn.cursor()
 
     # DROP PARA CREAR LAS TABLAS DE NUEVO
-    #cursor.execute("DROP TABLE IF EXISTS cliente") 
+    cursor.execute("DROP TABLE IF EXISTS cliente") 
     cursor.execute("DROP TABLE IF EXISTS destino") 
     cursor.execute("DROP TABLE IF EXISTS vuelo") 
     cursor.execute("DROP TABLE IF EXISTS avion") 
@@ -232,6 +263,7 @@ def restablecer():
         CREATE TABLE IF NOT EXISTS cliente (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nombre TEXT NOT NULL,
+            password TEXT NOT NULL,
             email TEXT NOT NULL UNIQUE,
             apellido TEXT NOT NULL,
             dni TEXT NOT NULL

@@ -18,7 +18,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QApplication, QComboBox,
     QFrame, QHeaderView, QLabel, QMainWindow,
     QPushButton, QSizePolicy, QTableWidget, QTableWidgetItem,
-    QVBoxLayout, QWidget)
+    QToolButton, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -175,6 +175,22 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_2.addWidget(self.tabla_vuelos)
 
+        self.bt_descargar = QToolButton(self.principal)
+        self.bt_descargar.setObjectName(u"bt_descargar")
+        self.bt_descargar.setStyleSheet(u"QToolButton {\n"
+"    background-color: rgba(255, 255, 255, 180); /* Blanco transparente */\n"
+"    border: 1px solid black; /* Borde negro */\n"
+"    border-radius: 5px; /* Esquinas redondeadas */\n"
+"    font-size: 14px; /* Tama\u00f1o del texto */\n"
+"    padding: 5px; /* Espaciado interno */\n"
+"}\n"
+"\n"
+"QToolButton:hover {\n"
+"    background-color: rgba(240, 240, 240, 200); /* Blanco m\u00e1s intenso al pasar el mouse */\n"
+"}")
+
+        self.verticalLayout_2.addWidget(self.bt_descargar)
+
         self.bt_volver = QPushButton(self.principal)
         self.bt_volver.setObjectName(u"bt_volver")
         self.bt_volver.setStyleSheet(u"QPushButton {\n"
@@ -210,6 +226,7 @@ class Ui_MainWindow(object):
         self.comboBox.setItemText(1, QCoreApplication.translate("MainWindow", u"Categoria", None))
         self.comboBox.setItemText(2, QCoreApplication.translate("MainWindow", u"Precio", None))
 
+        self.bt_descargar.setText(QCoreApplication.translate("MainWindow", u"Descargar PDF", None))
         self.bt_volver.setText(QCoreApplication.translate("MainWindow", u"Volver", None))
     # retranslateUi
 

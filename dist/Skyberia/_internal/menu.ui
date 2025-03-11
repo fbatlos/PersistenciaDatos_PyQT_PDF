@@ -142,7 +142,7 @@ background-color: rgba(150, 150, 150, 200); /* Fondo aún más oscuro al presion
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap resource="recursos.qrc">:/icons/recursos/iconos/usuario.png</pixmap>
+          <pixmap resource="../PersistenciaDatos_PyQT/recursos.qrc">:/icons/recursos/iconos/usuario.png</pixmap>
          </property>
          <property name="scaledContents">
           <bool>true</bool>
@@ -539,7 +539,7 @@ background-color: rgba(150, 150, 150, 200); /* Fondo aún más oscuro al presion
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap resource="recursos.qrc">:/icons/recursos/iconos/engranaje.png</pixmap>
+          <pixmap resource="../PersistenciaDatos_PyQT/recursos.qrc">:/icons/recursos/iconos/engranaje.png</pixmap>
          </property>
          <property name="scaledContents">
           <bool>true</bool>
@@ -687,7 +687,7 @@ background-color: rgba(150, 150, 150, 200); /* Fondo aún más oscuro al presion
                 </font>
                </property>
                <property name="text">
-                <string>Treding topics</string>
+                <string>Destinos vigentes</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -711,7 +711,7 @@ background-color: rgba(150, 150, 150, 200); /* Fondo aún más oscuro al presion
                  <height>16777215</height>
                 </size>
                </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_3">
+               <layout class="QVBoxLayout" name="verticalLayout_6">
                 <item>
                  <widget class="QTableWidget" name="QTTredingsTopicsTabla">
                   <property name="sizePolicy">
@@ -793,7 +793,7 @@ background-color: rgba(150, 150, 150, 200); /* Fondo aún más oscuro al presion
                    <bool>true</bool>
                   </property>
                   <attribute name="horizontalHeaderVisible">
-                   <bool>true</bool>
+                   <bool>false</bool>
                   </attribute>
                   <attribute name="horizontalHeaderMinimumSectionSize">
                    <number>32</number>
@@ -827,6 +827,16 @@ background-color: rgba(150, 150, 150, 200); /* Fondo aún más oscuro al presion
                     <string/>
                    </property>
                   </item>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="BtodoViajes">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="text">
+                   <string>Descargar todos los viajes</string>
+                  </property>
                  </widget>
                 </item>
                </layout>
@@ -875,7 +885,7 @@ background-color: rgba(150, 150, 150, 200); /* Fondo aún más oscuro al presion
   </action>
  </widget>
  <resources>
-  <include location="recursos.qrc"/>
+  <include location="../PersistenciaDatos_PyQT/recursos.qrc"/>
  </resources>
  <connections/>
 </ui>

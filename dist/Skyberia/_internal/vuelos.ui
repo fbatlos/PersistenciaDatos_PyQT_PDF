@@ -260,6 +260,26 @@ QTableWidget::horizontalHeader {
      </widget>
     </item>
     <item>
+     <widget class="QToolButton" name="bt_descargar">
+      <property name="styleSheet">
+       <string notr="true">QToolButton {
+    background-color: rgba(255, 255, 255, 180); /* Blanco transparente */
+    border: 1px solid black; /* Borde negro */
+    border-radius: 5px; /* Esquinas redondeadas */
+    font-size: 14px; /* Tamaño del texto */
+    padding: 5px; /* Espaciado interno */
+}
+
+QToolButton:hover {
+    background-color: rgba(240, 240, 240, 200); /* Blanco más intenso al pasar el mouse */
+}</string>
+      </property>
+      <property name="text">
+       <string>Descargar PDF</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QPushButton" name="bt_volver">
       <property name="styleSheet">
        <string notr="true">QPushButton {

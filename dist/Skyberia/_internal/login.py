@@ -10,6 +10,7 @@ import re
 import models.cliente as model
 import BD.basedatos as baseLocal
 from PyQt6.QtGui import QIcon
+import hashlib
 
 
 #Ventana Login / Register
@@ -62,8 +63,9 @@ class Ventana(QMainWindow):
         try:
             #Ingresamos el usuario en firebase
             user = self.auth.create_user_with_email_and_password(email, passw)
+            passw = hashlib.md5(passw.encode()).hexdigest()
             #Ingresamos los datos en la bd
-            cliente = model.Cliente(0,nombre, email, apellido, dni)
+            cliente = model.Cliente(0,nombre,passw, email, apellido, dni)
             existo = baseLocal.insertar_cliente(cliente)
             #Comprobamos que fue exitoso
             if existo is None:

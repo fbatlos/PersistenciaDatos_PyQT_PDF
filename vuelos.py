@@ -118,7 +118,7 @@ class Vuelos(QMainWindow):
             if resultados:
                 ruta_txt = resultados[0]  # Tomamos la primera coincidencia
             else:
-                QMessageBox.warning(self, 'Error', '¡No se encontró MisViajesInfo.txt!')
+                QMessageBox.warning(self, 'Error', '¡No se encontró VuelosInfo.txt!')
                 return
             
             with open(ruta_txt, "r", encoding="utf-8") as file:

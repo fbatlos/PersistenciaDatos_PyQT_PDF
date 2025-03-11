@@ -8,6 +8,9 @@ from PyQt6 import QtWidgets, uic
 import BD.basedatos as baseLocal
 from models.cliente import Cliente  # Librería para trabajar con el archivo de la interfaz
 from PyQt6.QtGui import QIcon
+import glob
+import markdown2
+from managerPDF.ManagerPDF import PDF4
 
 #clase que se encarga de actualizar el usuario, eliminar la cuenta del usuario o cerrar la sesion
 class Configuracion(QtWidgets.QMainWindow):
@@ -30,6 +33,7 @@ class Configuracion(QtWidgets.QMainWindow):
             self.QTEApellido.setPlainText(self.manager.usuario.apellido)
             self.QTEDni.setPlainText(self.manager.usuario.dni)
         self.BcerrarSesion.clicked.connect(self.cerrarSesion)
+        self.PBDescargar.clicked.connect(self.pdf)
 
     #navega hasta la ventana menu
     def irAMenu(self):
@@ -66,8 +70,8 @@ class Configuracion(QtWidgets.QMainWindow):
             if respuesta == QMessageBox.StandardButton.Yes:
                 baseLocal.update_cliente(nuevo_nombre, nuevo_email, dni, correo,)
                 usuario_actualizado = baseLocal.obtenerUsuarioPorCorreo(correo)
-                id, nombre, email, apellido, dni = usuario_actualizado
-                self.manager.usuario = Cliente(id, nombre, email, apellido, dni)
+                id, nombre, password, email, apellido, dni = usuario_actualizado
+                self.manager.usuario = Cliente(id, nombre, password, email, apellido, dni)
                 QMessageBox.information(self, "Actualización", "Datos actualizados con éxito.")
 
             #si no informa que el propio usuario lo ha cancelado
@@ -76,6 +80,7 @@ class Configuracion(QtWidgets.QMainWindow):
         else:
                 #lanzamos un error debido que el dni no cumple el formato especificado
                 QMessageBox.critical(self, 'Error', "El dni no es cumple el formato.")
+    
     #eliminamos el usuario del nuestro firebase y base local 
     def eliminarusuario(self):
         import pyrebase
@@ -125,3 +130,86 @@ class Configuracion(QtWidgets.QMainWindow):
         else:
             #le informamos al usuario que el mismo esta cancelando esa accion
             QMessageBox.information(self, "Acción cancelada por el usuario", "No se ha eliminado la cuenta.")
+
+    def pdf(self):
+        from models.cliente import Cliente
+        usuario:Cliente = self.manager.usuario
+        fecha = self.manager.managerPDF.generar_fecha_actual()
+        ruta_pdf = 'PDFs/informacionUsuario' + fecha + '.pdf'
+
+        try:
+            resultados = glob.glob("**/informacionUsuario.md", recursive=True)
+
+            if resultados:
+                ruta_txt = resultados[0]  # Tomamos la primera coincidencia
+            else:
+                # No encontrado
+                QMessageBox.warning(self, 'Error', '¡No se encontró informacionUsuario.md!')
+                return 
+
+            with open(ruta_txt, "r", encoding="utf-8") as file:
+                contenido_md = file.read()
+
+            contenido_html = markdown2.markdown(contenido_md)
+
+            pdf = PDF4()
+            pdf.set_auto_page_break(auto=True, margin=15)
+            pdf.add_page()
+            pdf.set_font("Arial", "", 12)
+            pdf.multi_cell(0, 10, f"Informe de información del usuario: {usuario.nombre}")
+            pdf.ln(5)
+            lista = ["nombre","password","email","apellido","dni"]
+            for dato in lista:
+                    pdf.set_font("Arial", "B", 12)
+                    pdf.multi_cell(0, 10, f"{dato.capitalize()}: {getattr(usuario, dato)}")
+                    pdf.ln(5)
+            pdf.add_page()
+            pdf.set_font("Arial", "", 12)
+
+            for linea in contenido_html.split("\n"):
+                if "<h1>" in linea:
+                    pdf.set_font("Arial", "B", 16)
+                    pdf.multi_cell(0, 10, linea.replace("<h1>", "").replace("</h1>", ""))
+                elif "<h2>" in linea:
+                    if "<em>" in linea:
+                        pdf.set_font("Arial", "B", 12)
+                        pdf.multi_cell(0, 10, linea.replace("<em>", "_").replace("</em>", "_").replace("<h2>", "").replace("</h2>", ""))
+                    else:
+                        pdf.set_font("Arial", "B", 14)
+                        pdf.multi_cell(0, 10, linea.replace("<h2>", "").replace("</h2>", ""))   
+                elif "<h3>" in linea:
+                    pdf.set_font("Arial", "B", 12)
+                    pdf.multi_cell(0, 10, linea.replace("<h3>", "").replace("</h3>", ""))
+                elif "<ul>" in linea or "<ol>" in linea:
+                    # Aquí solo marcamos que estamos en una lista, pero no agregamos nada aún
+                    lista_nueva = True
+                elif "<li>" in linea:
+                    if lista_nueva:
+                        pdf.set_font("Arial", "", 12)
+                        lista_nueva = False
+                    if "<em>" in linea:
+                        pdf.set_font("Arial", "", 12)
+                        pdf.multi_cell(0, 10, linea.replace("<em>", "_").replace("</em>", "_").replace("<li>", "").replace("</li>", ""))
+                    else:
+                        pdf.multi_cell(0, 8, "* " + linea.replace("<li>", "").replace("</li>", ""))
+                elif "</ul>" in linea or "</ol>" in linea:
+                    lista_nueva = False  # Fin de la lista
+                elif "<p>" in linea or "</p>" in linea:
+                    pdf.set_font("Arial", "", 12)
+                    pdf.multi_cell(0, 10, linea.replace("<p>", "").replace("</p>", ""))
+                elif "<hr />" in linea:
+                    pdf.ln(5)  # Añadimos un espacio después de la línea <hr>
+                    pdf.set_font("Arial", "", 10) 
+                    pdf.multi_cell(0, 2, "------------------------------------------------------------------------------------------------------------------------")
+                    pdf.ln(5)  # Añadimos un espacio después de la línea de separación
+                else:
+                    pdf.set_font("Arial", "", 12)
+                    pdf.multi_cell(0, 6, linea.strip())
+
+
+
+            pdf.output(ruta_pdf, 'F')
+            QMessageBox.information(self,'Información', '¡Informe 1 creado con éxito!') 
+
+        except FileNotFoundError:
+            QMessageBox.warning(self, 'Error', '¡No se encontró MisViajesInfo.txt!')
